@@ -3,7 +3,7 @@ import frameBg from "@/assets/CMS Assets/Frame 98699.png"
 import handbag from "@/assets/CMS Assets/Handbag.png"
 import { Button } from "@/components/ui/button"
 
-export default function () {
+export default function AuthPage() {
   return (
     <section className='w-screen grid grid-cols-2'>
       <div className='flex flex-col items-center justify-center gap-10 w-full'>

@@ -61,7 +61,7 @@ export const MainLayout = ({ children }: LayoutProps) => {
           <ul className='space-y-2 font-medium'>
             <li>
               <Link
-                href='/logout'
+                href='/auth'
                 className='flex items-center p-2 text-white rounded-lg group'>
                 <div>
                   <CiLogin />
