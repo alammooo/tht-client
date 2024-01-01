@@ -1,4 +1,5 @@
 import { CatDropdown } from "@/components/shared/category/Dropdown"
+import CategoryList from "@/features/category/CategoryList"
 import { formatAsRupiah } from "@/utils/rupiahFormat"
 import { ChangeEvent, useState } from "react"
 
@@ -25,7 +26,7 @@ export default function ProductForm() {
             className='block mb-2 text-sm font-semibold text-gray-900'>
             Kategori
           </label>
-          <CatDropdown />
+          <CategoryList />
         </div>
         <div className='col-span-2'>
           <label

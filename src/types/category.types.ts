@@ -4,7 +4,7 @@ export type Category = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-} | [];
+};
 
 export type CreateInput = Omit<Category, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 

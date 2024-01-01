@@ -14,10 +14,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Category } from "@/types/category.types"
-import { useAppSelector } from "@/app/hooks"
-import { selectCategory } from "./categorySlice"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
+import { fetchCategory, categoryData, setSelectedCategoryId } from "./categorySlice"
+import { baseUrl } from "@/utils/baseUrl"
+import axios from "axios"
 
 const frameworks = [
   {
@@ -43,11 +45,14 @@ const frameworks = [
 ]
 
 export default function CategoryList() {
-  const data = useAppSelector(selectCategory)
+  const categories = useAppSelector(categoryData)
+  const dispatch = useAppDispatch()
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState("")
 
-  console.log(data, "HALLO DATA✅✅✅✅✅✅")
+  useEffect(() => {
+    dispatch(fetchCategory())
+  }, [])
 
   return (
     <Popover
@@ -59,37 +64,36 @@ export default function CategoryList() {
           role='combobox'
           aria-expanded={open}
           className='w-[200px] justify-between'>
-          {value
-            ? value
-            : "Semua"}
+          {value ? <span className='capitalize'>{value}</span> : "Semua"}
           <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-[200px] p-0'>
         <Command>
           <CommandInput
-            placeholder='Cari Category ...'
+            placeholder='Cari Kategori ...'
             className='h-9'
           />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandEmpty>Kategori tidak ditemukan.</CommandEmpty>
           <CommandGroup>
-            {/* {frameworks.map((framework) => (
+            {categories?.map((data) => (
               <CommandItem
-                key={framework.value}
-                value={framework.value}
+                key={data.id}
+                value={data.name}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue)
+                  setValue(currentValue)
                   setOpen(false)
+                  dispatch(setSelectedCategoryId(data.id))
                 }}>
-                {framework.label}
+                <span className='capitalize'>{data.name}</span>
                 <CheckIcon
                   className={cn(
                     "ml-auto h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0"
+                    value === data.name ? "opacity-100" : "opacity-0"
                   )}
                 />
               </CommandItem>
-            ))} */}
+            ))}
           </CommandGroup>
         </Command>
       </PopoverContent>

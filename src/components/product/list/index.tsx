@@ -59,7 +59,6 @@ export default function ProductList() {
           </button>
         </div>
       </div>
-      <Counter />
       <ProductTable />
     </div>
   )

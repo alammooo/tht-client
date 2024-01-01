@@ -5,15 +5,17 @@ import { baseUrl } from "@/utils/baseUrl"
 import { Category } from "@/types/category.types"
 
 export interface CategoryState {
-  category: Category
+  category: Category[] | []
   status: "idle" | "loading" | "failed" | "success"
   error: string | null | undefined
+  selectedId: number
 }
 
 const initialState: CategoryState = {
   category: [],
   status: "idle",
   error: null,
+  selectedId: 0,
 }
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -26,7 +28,6 @@ export const fetchCategory = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(`${baseUrl}/category`) // Replace '/api/categories' with your backend endpoint
-      console.log(response, "MASUK RESPONSE✅✅✅✅✅")
       return response.data // Assuming the response.data is an array of Category objects
     } catch (error) {
       // Handle errors
@@ -40,7 +41,10 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    // You can add additional reducers for managing categories here if needed
+    setSelectedCategoryId(state, action) {
+      state.selectedId = action.payload
+      console.log(state.selectedId, "HALLO STATE✅✅✅✅")
+    },
   },
   extraReducers: (builder) => {
     // Add reducers for handling the fetchCategories action lifecycle
@@ -60,6 +64,6 @@ const categorySlice = createSlice({
   },
 })
 
-export const {} = categorySlice.actions
-export const selectCategory = (state: RootState) => state.category.category
+export const { setSelectedCategoryId } = categorySlice.actions
+export const categoryData = (state: RootState) => state.category.category
 export default categorySlice.reducer
