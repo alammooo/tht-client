@@ -17,9 +17,10 @@ import {
 import { useEffect, useState } from "react"
 import { Category } from "@/types/category.types"
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { fetchCategory, categoryData, setSelectedCategoryId } from "./categorySlice"
+import { fetchCategory, categoryData, setSelectedId } from "./categorySlice"
 import { baseUrl } from "@/utils/baseUrl"
 import axios from "axios"
+import { fetchProduct } from "../product/productSlice"
 
 const frameworks = [
   {
@@ -83,7 +84,12 @@ export default function CategoryList() {
                 onSelect={(currentValue) => {
                   setValue(currentValue)
                   setOpen(false)
-                  dispatch(setSelectedCategoryId(data.id))
+                  dispatch(setSelectedId(data.id))
+                  dispatch(
+                    fetchProduct({
+                      categoryId: data.id,
+                    })
+                  )
                 }}>
                 <span className='capitalize'>{data.name}</span>
                 <CheckIcon

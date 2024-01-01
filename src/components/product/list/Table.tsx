@@ -2,13 +2,28 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { fetchProduct, productData } from "@/features/product/productSlice"
 import Image from "next/image"
 import { useEffect } from "react"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 export default function ProductTable() {
   const products = useAppSelector(productData)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchProduct())
+    dispatch(
+      fetchProduct({
+        categoryId: undefined,
+        offset: 0,
+        name: undefined,
+      })
+    )
   }, [])
 
   return (
@@ -63,7 +78,7 @@ export default function ProductTable() {
             <tr className='odd:bg-white even:bg-gray-50 border-b'>
               <td className='px-6 py-4'>{i + 1}</td>
               <td className='px-6 py-4'>
-                <Image
+                <img
                   src={pro.image}
                   alt={pro.name}
                 />
@@ -93,6 +108,34 @@ export default function ProductTable() {
           ))}
         </tbody>
       </table>
+      <div className='my-3'>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href='#' />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href='#'>1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink
+                href='#'
+                isActive>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href='#'>3</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href='#' />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
     </div>
   )
 }

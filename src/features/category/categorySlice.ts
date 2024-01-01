@@ -41,9 +41,8 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    setSelectedCategoryId(state, action) {
+    setSelectedId(state, action) {
       state.selectedId = action.payload
-      console.log(state.selectedId, "HALLO STATE✅✅✅✅")
     },
   },
   extraReducers: (builder) => {
@@ -64,6 +63,7 @@ const categorySlice = createSlice({
   },
 })
 
-export const { setSelectedCategoryId } = categorySlice.actions
+export const { setSelectedId } = categorySlice.actions
 export const categoryData = (state: RootState) => state.category.category
+export const categoryId = (state: RootState) => state.category.selectedId
 export default categorySlice.reducer

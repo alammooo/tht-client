@@ -2,12 +2,18 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "@/app/store"
 import axios from "axios"
 import { baseUrl } from "@/utils/baseUrl"
-import { Product } from "@/types/product.types"
+import {
+  CreateInput,
+  FindInput,
+  Pagination,
+  Product,
+} from "@/types/product.types"
+import { toast } from "@/components/ui/use-toast"
 
 export interface ProductState {
   product: Product[] | []
   status: "idle" | "loading" | "failed" | "success"
-  error: string | null | undefined
+  error: string | null | undefined | {}
   selectedId: number
 }
 
@@ -25,9 +31,17 @@ const initialState: ProductState = {
 // typically used to make async requests.
 export const fetchProduct = createAsyncThunk(
   "product/fetchProduct",
-  async () => {
+  async (params: FindInput & Pagination) => {
     try {
-      const response = await axios.get(`${baseUrl}/product`) // Replace '/api/categories' with your backend endpoint
+      console.log(params, "HALLO PARAMS")
+      const response = await axios.get(`${baseUrl}/product`, {
+        params: {
+          offset: params.offset || 0,
+          categoryId: params.categoryId || undefined,
+          name: params.name || undefined,
+        },
+      }) // Replace '/api/categories' with your backend endpoint
+      console.log(response.data)
       return response.data // Assuming the response.data is an array of Product objects
     } catch (error) {
       // Handle errors
@@ -39,14 +53,25 @@ export const fetchProduct = createAsyncThunk(
 
 export const createProduct = createAsyncThunk(
   "product/fetchProduct",
-  async () => {
+  async (payload: FormData) => {
     try {
-      const response = await axios.get(`${baseUrl}/product`) // Replace '/api/categories' with your backend endpoint
-      return response.data // Assuming the response.data is an array of Product objects
+      const response = await axios.post(`${baseUrl}/product`, payload) // Replace '/api/categories' with your backend endpoint
+      if (response.status === 201) {
+        return toast({
+          title: "Scheduled: Catch up",
+          description: "Friday, February 10, 2023 at 5:57 PM",
+        }) // Assuming the response.data is an array of Product objects
+      }
     } catch (error) {
       // Handle errors
       console.log(error)
-      throw Error("Failed to fetch products")
+      throw Error("Failed to post products")
+    } finally {
+      fetchProduct({
+        offset: 1,
+        categoryId: undefined,
+        name: undefined,
+      })
     }
   }
 )
@@ -55,9 +80,10 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setSelectedProductId(state, action) {
+    setSelectedId(state, action) {
       state.selectedId = action.payload
     },
+    createProduct(state, action) {},
   },
   extraReducers: (builder) => {
     // Add reducers for handling the fetchCategories action lifecycle
@@ -77,6 +103,6 @@ const productSlice = createSlice({
   },
 })
 
-export const { setSelectedProductId } = productSlice.actions
+export const { setSelectedId } = productSlice.actions
 export const productData = (state: RootState) => state.product.product
 export default productSlice.reducer
