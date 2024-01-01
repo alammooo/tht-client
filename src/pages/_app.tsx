@@ -13,6 +13,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 import MainLayout from "@/components/layouts/Main"
+import { Provider } from "react-redux"
+import { store } from "@/app/store"
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({ subsets: ["latin"] })
@@ -59,10 +61,12 @@ export default function MyApp({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <main className={`${inter.className}`}>
-        {renderWithLayout(<Component {...pageProps} />)}
-        <Toaster />
-      </main>
+      <Provider store={store}>
+        <main className={`${inter.className}`}>
+          {renderWithLayout(<Component {...pageProps} />)}
+          <Toaster />
+        </main>
+      </Provider>
     </QueryClientProvider>
   )
 }

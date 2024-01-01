@@ -1,6 +1,8 @@
 import { CatDropdown } from "@/components/shared/category/Dropdown"
 import ProductTable from "./Table"
 import { useRouter } from "next/router"
+import { Counter } from "@/features/counter/Counter"
+import CategoryList from "@/features/category/CategoryList"
 
 export default function ProductList() {
   const router = useRouter()
@@ -41,7 +43,7 @@ export default function ProductList() {
               />
             </div>
           </form>
-          <CatDropdown />
+          <CategoryList />
         </div>
         <div className='flex gap-7'>
           <button
@@ -57,6 +59,7 @@ export default function ProductList() {
           </button>
         </div>
       </div>
+      <Counter />
       <ProductTable />
     </div>
   )
